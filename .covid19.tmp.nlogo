@@ -1,10 +1,25 @@
+globals[
+  infected-persons
+  total-dead
+  total-recovered
+  num-days
+]
+
 turtles-own [
   infected?
-  immune?]
+  immune?
+
+  incubation-period
+  total-days-with-covid
+]
 
 to setup
   clear-all
   setup-turtles
+  set num-days 0
+  set total-dead 0
+  set total-recovered 0
+  set infected-persons initial-infected
   reset-ticks
 end
 
@@ -19,9 +34,12 @@ to setup-turtles
 end
 
 to go
+  if num-days = 360 [ stop ]
   infect
+  check-person
   move
   set-color
+  set num-days num-days + 1
   tick
 end
 
@@ -29,7 +47,13 @@ to move
   ask turtles [
     rt random 360
     lt random 360
-    fd 1 ]
+    fd 1
+
+    if (infected? = 1 and immune? = 0) [
+        set total-days-with-covid total-days-with-covid + 1
+    ]
+
+  ]
 end
 
 to set-color
@@ -39,11 +63,14 @@ to set-color
        [ifelse (immune? = 1) [
          set color blue]
          [if (infected? = 0 and immune? = 0) [
-         set color green]]]] ;
+         set color green]]]]
 end
+
 to become-infected
   set infected? 1
   set immune? 0
+  set total-days-with-covid 0
+  set incubation-period 5
 end
 
 to become-immune
@@ -73,6 +100,22 @@ to infect
     ask other turtles-here [
       if (immune? = 0) [
         become-infected]]]
+end
+
+to check-person
+  ask turtles with [ infected? = 1 and immune? = 0] [
+
+    if total-days-with-covid >= (incubation-period + (random 10) )[
+      set total-dead total-dead + 1
+      die
+    ]
+
+    if total-days-with-covid < (incubation-period + 10) [
+      become-healthy
+      set total-recovered total-recovered + 1
+      set infected-persons infected-persons  - 1
+    ]
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -150,10 +193,10 @@ NIL
 1
 
 BUTTON
-127
-57
-190
-90
+174
+91
+237
+124
 NIL
 go
 NIL
@@ -182,12 +225,45 @@ NIL
 HORIZONTAL
 
 MONITOR
-1296
-319
-1353
-364
-Death
-num-death
+1073
+189
+1152
+234
+total-dead
+total-dead
+17
+1
+11
+
+MONITOR
+1073
+76
+1151
+121
+num-days
+num-days
+17
+1
+11
+
+MONITOR
+1073
+130
+1185
+175
+total-recovered
+total-recovered
+17
+1
+11
+
+MONITOR
+1074
+250
+1198
+295
+NIL
+infected-persons
 17
 1
 11
