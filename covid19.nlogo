@@ -36,19 +36,11 @@ to set-color
    ask turtles [
      ifelse (infected? > 0)
        [set color red]
-       [ifelse (immune? > 0) [
-         set color blue]
-         [if (infected? = 0 and immune? = 0) [
-         set color green]]]] ;
+       [set color green]]
 end
 
 to become-infected
   set infected? 1
-  set immune? 0
-end
-
-to become-healthy
-  set infected? 0
   set immune? 0
 end
 
@@ -64,7 +56,9 @@ to setup-immune
 end
 
 to setup-infected
-  ask n-of 1 turtles with [immune? = 0] [
+  let num-vaccinated ((percent-vaccinated / 100) * num-turtles)
+  let infected (num-turtles - num-vaccinated)
+  ask n-of infected turtles with [immune? = 0] [
     become-infected]
 end
 
@@ -110,7 +104,7 @@ num-turtles
 num-turtles
 0
 100
-50.0
+100.0
 1
 1
 NIL
