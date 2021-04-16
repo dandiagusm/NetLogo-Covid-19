@@ -11,6 +11,7 @@ turtles-own [
 
   incubation-period
   total-days-with-covid
+  survival-chance
 ]
 
 to setup
@@ -70,7 +71,8 @@ to become-infected
   set infected? 1
   set immune? 0
   set total-days-with-covid 0
-  set incubation-period 5
+  set incubation-period 14
+  set survival-chance random 100
 end
 
 to become-immune
@@ -99,21 +101,25 @@ to infect
   ask turtles with [infected? = 1] [
     ask other turtles-here [
       if (immune? = 0) [
-        become-infected]]]
+        become-infected
+        set infected-persons infected-persons  + 1  ]]]
 end
 
 to check-person
   ask turtles with [ infected? = 1 and immune? = 0] [
 
     if total-days-with-covid >= (incubation-period + (random 10) )[
-      set total-dead total-dead + 1
-      die
-    ]
+      if (survival-chance < 50) [
+        set total-dead total-dead + 1
+        set infected-persons infected-persons  - 1
+        die
+      ]
 
-    if total-days-with-covid < (incubation-period + 10) [
-      become-healthy
-      set total-recovered total-recovered + 1
-      set infected-persons infected-persons  - 1
+      if (survival-chance >= 50) [
+        become-healthy
+        set total-recovered total-recovered + 1
+        set infected-persons infected-persons  - 1
+      ]
     ]
   ]
 end
@@ -154,7 +160,7 @@ num-turtles
 num-turtles
 0
 100
-100.0
+20.0
 1
 1
 NIL
