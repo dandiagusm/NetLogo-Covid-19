@@ -9,8 +9,8 @@ globals[
 turtles-own [
   infected?
   vaccinated?
+  recovered?
 
-  incubation-period
   total-days-with-covid
   survival-chance
   dead?
@@ -51,7 +51,7 @@ to move
   ask turtles [
     rt random 360
     lt random 360
-    fd 1
+    fd forward-distance
 
     if (infected? = 1 and vaccinated? = 0) [
       set total-days-with-covid total-days-with-covid + 1
@@ -72,7 +72,6 @@ to become-infected
   set infected? 1
   set vaccinated? 0
   set total-days-with-covid 0
-  set incubation-period 14
   set survival-chance random 100
 end
 
@@ -83,6 +82,7 @@ end
 
 to become-healthy
     set infected? 0
+    set recovered? 1
 end
 
 to setup-vaccinated
@@ -99,7 +99,7 @@ end
 
 to infect
   ask turtles with [infected? = 1] [
-    let targets turtles in-radius 1
+    let targets turtles in-radius radius-infection
     ask targets [
       if (vaccinated? = 0 and infected? = 0) [
         become-infected
@@ -109,7 +109,7 @@ end
 to check-person
   ask turtles with [ infected? = 1 and vaccinated? = 0] [
 
-    if total-days-with-covid >= (incubation-period + (random 10) )[
+    if total-days-with-covid >= (incubation-period + 3 + (random 10))[
       if (survival-chance < 50) [
         set total-dead total-dead + 1
         set infected-persons infected-persons  - 1
@@ -153,25 +153,25 @@ ticks
 30.0
 
 SLIDER
-33
-183
-205
-216
+48
+159
+220
+192
 num-cluster
 num-cluster
 0
 10
-4.0
+7.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-33
-281
-206
-314
+48
+257
+221
+290
 percent-vaccinated
 percent-vaccinated
 0
@@ -183,10 +183,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-37
-56
-117
-89
+49
+57
+129
+90
 NIL
 setup
 NIL
@@ -200,10 +200,10 @@ NIL
 1
 
 BUTTON
-125
-56
-207
-89
+137
+57
+219
+90
 NIL
 go
 NIL
@@ -217,15 +217,15 @@ NIL
 1
 
 SLIDER
-33
-230
-205
-263
+48
+206
+220
+239
 initial-infected
 initial-infected
 0
 100
-15.0
+100.0
 1
 1
 NIL
@@ -276,10 +276,10 @@ infected-persons
 11
 
 BUTTON
-37
-105
-206
-138
+49
+106
+218
+139
 NIL
 go
 T
@@ -293,10 +293,10 @@ NIL
 1
 
 PLOT
-32
-337
-336
-487
+822
+315
+1218
+530
 num person alive vs day
 day
 num person alive
@@ -309,7 +309,53 @@ true
 "" ""
 PENS
 "alive" 1.0 0 -13840069 true "" "plot count turtles"
-"death" 1.0 0 -5298144 true "plot count total-dead" "plot count total-dead"
+"infected" 1.0 0 -5298144 true "plot count total-dead" "plot count turtles with [infected? = 1 and vaccinated? = 0] "
+"recovered" 1.0 0 -4079321 true "" "plot count turtles with [recovered? = 1]"
+
+SLIDER
+47
+307
+219
+340
+radius-infection
+radius-infection
+1
+10
+6.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+45
+357
+223
+390
+forward-distance
+forward-distance
+1
+5
+2.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+43
+403
+227
+436
+incubation-period
+incubation-period
+7
+30
+14.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
