@@ -2,6 +2,7 @@ globals[
   infected-persons
   total-dead
   total-recovered
+  num-person
   num-days
 ]
 
@@ -12,6 +13,7 @@ turtles-own [
   incubation-period
   total-days-with-covid
   survival-chance
+  dead?
 ]
 
 to setup
@@ -25,7 +27,8 @@ to setup
 end
 
 to setup-turtles
-  crt num-turtles
+  set num-person num-cluster * 20
+  crt num-person
   ask turtles [
   setxy random-xcor random-ycor
   set heading (random 360)]
@@ -51,9 +54,8 @@ to move
     fd 1
 
     if (infected? = 1 and vaccinated? = 0) [
-        set total-days-with-covid total-days-with-covid + 1
+      set total-days-with-covid total-days-with-covid + 1
     ]
-
   ]
 end
 
@@ -81,11 +83,10 @@ end
 
 to become-healthy
     set infected? 0
-    set vaccinated? 0
 end
 
 to setup-vaccinated
-  let num-vaccinated ((percent-vaccinated / 100) * num-turtles)
+  let num-vaccinated ((percent-vaccinated / 100) * num-person)
   ask n-of num-vaccinated turtles [
      become-vaccinated ]
 end
@@ -125,10 +126,10 @@ to check-person
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-539
-131
-976
-569
+368
+104
+805
+542
 -1
 -1
 13.0
@@ -156,11 +157,11 @@ SLIDER
 183
 205
 216
-num-turtles
-num-turtles
+num-cluster
+num-cluster
 0
-100
-20.0
+10
+4.0
 1
 1
 NIL
@@ -169,23 +170,23 @@ HORIZONTAL
 SLIDER
 33
 281
-229
+206
 314
 percent-vaccinated
 percent-vaccinated
 0
 100
-11.0
+24.0
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-38
-57
-111
-90
+37
+56
+117
+89
 NIL
 setup
 NIL
@@ -201,7 +202,7 @@ NIL
 BUTTON
 125
 56
-188
+207
 89
 NIL
 go
@@ -224,7 +225,7 @@ initial-infected
 initial-infected
 0
 100
-10.0
+15.0
 1
 1
 NIL
@@ -277,7 +278,7 @@ infected-persons
 BUTTON
 37
 105
-189
+206
 138
 NIL
 go
@@ -290,6 +291,25 @@ NIL
 NIL
 NIL
 1
+
+PLOT
+32
+337
+336
+487
+num person alive vs day
+day
+num person alive
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"alive" 1.0 0 -13840069 true "" "plot count turtles"
+"death" 1.0 0 -5298144 true "plot count total-dead" "plot count total-dead"
 
 @#$#@#$#@
 ## WHAT IS IT?
