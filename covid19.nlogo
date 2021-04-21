@@ -7,7 +7,7 @@ globals[
 
 turtles-own [
   infected?
-  immune?
+  vaccinated?
 
   incubation-period
   total-days-with-covid
@@ -29,7 +29,7 @@ to setup-turtles
   ask turtles [
   setxy random-xcor random-ycor
   set heading (random 360)]
-  setup-immune
+  setup-vaccinated
   setup-infected
   set-color
 end
@@ -50,7 +50,7 @@ to move
     lt random 360
     fd 1
 
-    if (infected? = 1 and immune? = 0) [
+    if (infected? = 1 and vaccinated? = 0) [
         set total-days-with-covid total-days-with-covid + 1
     ]
 
@@ -59,54 +59,54 @@ end
 
 to set-color
    ask turtles [
-     ifelse (infected? = 1 and immune? = 0)
-       [set color red]
-       [ifelse (immune? = 1) [
-         set color blue]
-         [if (infected? = 0 and immune? = 0) [
-         set color green]]]]
+     ifelse (vaccinated? = 1)
+       [set color blue]
+       [ifelse (infected? = 1)
+         [set color red]
+         [set color green]]]
 end
 
 to become-infected
   set infected? 1
-  set immune? 0
+  set vaccinated? 0
   set total-days-with-covid 0
   set incubation-period 14
   set survival-chance random 100
 end
 
-to become-immune
+to become-vaccinated
     set infected? 0
-    set immune? 1
+    set vaccinated? 1
 end
 
 to become-healthy
     set infected? 0
-    set immune? 0
+    set vaccinated? 0
 end
 
-to setup-immune
+to setup-vaccinated
   let num-vaccinated ((percent-vaccinated / 100) * num-turtles)
   ask n-of num-vaccinated turtles [
-     become-immune ]
+     become-vaccinated ]
 end
 
 to setup-infected
-  ask n-of initial-infected turtles with [immune? = 0 ] [
+  ask n-of initial-infected turtles with [vaccinated? = 0 ] [
     become-infected]
 end
 
 
 to infect
   ask turtles with [infected? = 1] [
-    ask other turtles-here [
-      if (immune? = 0) [
+    let targets turtles in-radius 1
+    ask targets [
+      if (vaccinated? = 0 and infected? = 0) [
         become-infected
         set infected-persons infected-persons  + 1  ]]]
 end
 
 to check-person
-  ask turtles with [ infected? = 1 and immune? = 0] [
+  ask turtles with [ infected? = 1 and vaccinated? = 0] [
 
     if total-days-with-covid >= (incubation-period + (random 10) )[
       if (survival-chance < 50) [
