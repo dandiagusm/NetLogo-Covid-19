@@ -126,10 +126,10 @@ to check-person
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-368
-104
-805
-542
+269
+56
+706
+494
 -1
 -1
 13.0
@@ -232,10 +232,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-1073
-189
-1152
-234
+738
+170
+851
+215
 total-dead
 total-dead
 17
@@ -243,10 +243,10 @@ total-dead
 11
 
 MONITOR
-1073
-76
-1151
-121
+735
+57
+851
+102
 num-days
 num-days
 17
@@ -254,10 +254,10 @@ num-days
 11
 
 MONITOR
-1073
-130
-1185
-175
+737
+111
+850
+156
 total-recovered
 total-recovered
 17
@@ -265,10 +265,10 @@ total-recovered
 11
 
 MONITOR
-1074
-250
-1198
-295
+739
+231
+851
+276
 NIL
 infected-persons
 17
@@ -293,11 +293,11 @@ NIL
 1
 
 PLOT
-822
-315
-1218
-530
-num person alive vs day
+860
+58
+1231
+271
+num persons
 day
 num person alive
 0.0
