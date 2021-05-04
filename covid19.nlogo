@@ -238,10 +238,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-738
-170
-851
-215
+736
+115
+849
+160
 total-dead
 total-dead
 17
@@ -260,10 +260,10 @@ num-days
 11
 
 MONITOR
-737
-111
-851
-156
+736
+295
+850
+340
 recovered case
 total-recovered
 17
@@ -271,10 +271,10 @@ total-recovered
 11
 
 MONITOR
-739
-231
-851
-276
+737
+176
+849
+221
 NIL
 infected-persons
 17
@@ -381,6 +381,17 @@ true
 PENS
 "infected case" 1.0 0 -5298144 true "" "plot infected-case"
 "recovered case" 1.0 0 -987046 true "" "plot total-recovered"
+
+MONITOR
+738
+236
+849
+281
+infected case
+infected-case
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
